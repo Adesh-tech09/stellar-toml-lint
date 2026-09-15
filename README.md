@@ -85,6 +85,7 @@ cat stellar.toml | stellar-toml-lint -
 | `-q, --quiet`        | Show errors only                                                 |
 | `--show-help-urls`   | Print the spec link for each finding                             |
 | `--list-rules`       | Print every rule and exit                                        |
+| `--no-suggestions`   | Hide diagnostic suggestions in the output |
 
 Exit codes: **0** no errors, **1** problems found, **2** bad usage or I/O failure.
 
