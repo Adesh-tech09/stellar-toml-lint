@@ -20,6 +20,7 @@ const DEFAULT_PATH = 'stellar.toml';
 type Format = 'text' | 'json' | 'sarif' | 'github';
 
 interface Cli {
+  noSuggestions?: boolean;
   paths: string[];
   domain?: string;
   format: Format;
@@ -51,6 +52,7 @@ OPTIONS
       --warn <rule>       Lower a rule to warning (repeatable)
   -q, --quiet             Report errors only
       --show-help-urls    Print the spec link for each finding
+      --no-suggestions    Hide diagnostic suggestions in the output
       --color / --no-color
       --list-rules        Print every rule and exit
   -v, --version
@@ -128,6 +130,7 @@ function render(result: LintResult, name: string, cli: Cli, color: boolean): str
         filename: name,
         color,
         showHelp: cli.showHelp,
+        showSuggestions: !cli.noSuggestions,
         errorsOnly: cli.quiet,
       });
   }
@@ -195,6 +198,10 @@ function parseArgs(argv: string[]): Cli | 'handled' {
 
       case '--strict':
         cli.strict = true;
+        break;
+
+      case '--no-suggestions':
+        cli.noSuggestions = true;
         break;
 
       case '--max-warnings': {
