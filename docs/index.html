@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -30,7 +30,13 @@
           <a href="#api">API</a>
           <a href="#ci">CI</a>
         </nav>
-        <a class="button button-secondary" href="https://github.com/anchor-tools/stellar-toml-lint" target="_blank" rel="noreferrer">GitHub</a>
+        <a
+          class="button button-secondary"
+          href="https://github.com/anchor-tools/stellar-toml-lint"
+          target="_blank"
+          rel="noreferrer"
+          >GitHub</a
+        >
       </div>
     </header>
 
@@ -41,11 +47,24 @@
             <p class="eyebrow">Offline SEP-1 validation</p>
             <h1>Catch Stellar info file issues before you deploy.</h1>
             <p class="lead">
-              stellar-toml-lint reads your local <code>stellar.toml</code> or a live domain and reports rule violations with file/line references, severity levels, and spec links.
+              stellar-toml-lint reads your local <code>stellar.toml</code> or a live domain and
+              reports rule violations with file/line references, severity levels, and spec links.
             </p>
             <div class="cta-row">
-              <a class="button" href="https://www.npmjs.com/package/stellar-toml-lint" target="_blank" rel="noreferrer">npm package</a>
-              <a class="button button-secondary" href="../README.md" target="_blank" rel="noreferrer">Project README</a>
+              <a
+                class="button"
+                href="https://www.npmjs.com/package/stellar-toml-lint"
+                target="_blank"
+                rel="noreferrer"
+                >npm package</a
+              >
+              <a
+                class="button button-secondary"
+                href="https://github.com/anchor-tools/stellar-toml-lint#readme"
+                target="_blank"
+                rel="noreferrer"
+                >Project README</a
+              >
             </div>
             <ul class="hero-meta">
               <li>Node.js 20+</li>
@@ -83,19 +102,22 @@ public/.well-known/stellar.toml
             <article class="card">
               <h3>Local-first linting</h3>
               <p>
-                The project validates a file before it is deployed, instead of waiting for a live domain to fail in production.
+                The project validates a file before it is deployed, instead of waiting for a live
+                domain to fail in production.
               </p>
             </article>
             <article class="card">
               <h3>SEP-1 and Stellar checks</h3>
               <p>
-                It validates checksum correctness, URL formats, field constraints, network passphrases, policy combinations, and more.
+                It validates checksum correctness, URL formats, field constraints, network
+                passphrases, policy combinations, and more.
               </p>
             </article>
             <article class="card">
               <h3>CI-friendly output</h3>
               <p>
-                It supports text, JSON, SARIF, and GitHub workflow annotations so the output works in pull requests and security tooling.
+                It supports text, JSON, SARIF, and GitHub workflow annotations so the output works
+                in pull requests and security tooling.
               </p>
             </article>
           </div>
@@ -152,15 +174,24 @@ public/.well-known/stellar.toml
           <div class="check-grid">
             <div class="check-item">
               <h3>File</h3>
-              <p>Files under the size limit, TOML parsing, line/column diagnostics, UTF-8 BOM detection.</p>
+              <p>
+                Files under the size limit, TOML parsing, line/column diagnostics, UTF-8 BOM
+                detection.
+              </p>
             </div>
             <div class="check-item">
               <h3>General</h3>
-              <p>Version fields, network passphrases, URL constraints, checksum validation, deprecated and unknown fields.</p>
+              <p>
+                Version fields, network passphrases, URL constraints, checksum validation,
+                deprecated and unknown fields.
+              </p>
             </div>
             <div class="check-item">
               <h3>[DOCUMENTATION]</h3>
-              <p>Required organization metadata, URL/domain consistency, email, phone, and social handle validation.</p>
+              <p>
+                Required organization metadata, URL/domain consistency, email, phone, and social
+                handle validation.
+              </p>
             </div>
             <div class="check-item">
               <h3>[[PRINCIPALS]]</h3>
@@ -168,7 +199,10 @@ public/.well-known/stellar.toml
             </div>
             <div class="check-item">
               <h3>[[CURRENCIES]]</h3>
-              <p>Asset code rules, issuance policies, anchored asset metadata, collateral validation, duplicate asset checks.</p>
+              <p>
+                Asset code rules, issuance policies, anchored asset metadata, collateral validation,
+                duplicate asset checks.
+              </p>
             </div>
             <div class="check-item">
               <h3>[[VALIDATORS]]</h3>
@@ -176,7 +210,10 @@ public/.well-known/stellar.toml
             </div>
             <div class="check-item full-width">
               <h3>Network checks</h3>
-              <p>With <code>--domain</code>, it verifies reachability, CORS headers, content type, and file size for deployed anchors.</p>
+              <p>
+                With <code>--domain</code>, it verifies reachability, CORS headers, content type,
+                and file size for deployed anchors.
+              </p>
             </div>
           </div>
         </div>
@@ -202,7 +239,10 @@ cat stellar.toml | stellar-toml-lint -</code></pre>
           <div class="card">
             <h3>Common flags</h3>
             <ul class="feature-list">
-              <li><code>-d, --domain &lt;d&gt;</code> — serve from a domain for CORS and same-domain checks</li>
+              <li>
+                <code>-d, --domain &lt;d&gt;</code> — serve from a domain for CORS and same-domain
+                checks
+              </li>
               <li><code>-f, --format &lt;fmt&gt;</code> — text, json, sarif, github</li>
               <li><code>--strict</code> — treat warnings like errors</li>
               <li><code>--show-help-urls</code> — include spec links for each finding</li>
@@ -219,7 +259,9 @@ cat stellar.toml | stellar-toml-lint -</code></pre>
             <h2>Use the library directly inside Node.js and CI jobs.</h2>
           </div>
 
-          <pre class="code-block wide"><code>import { lint, lintDomain, formatText } from 'stellar-toml-lint';
+          <pre
+            class="code-block wide"
+          ><code>import { lint, lintDomain, formatText } from 'stellar-toml-lint';
 import { readFile } from 'node:fs/promises';
 
 const result = lint(await readFile('stellar.toml', 'utf8'), {
@@ -284,17 +326,59 @@ const live = await lintDomain('example.com');</code></pre>
         <div>
           <h4>Project</h4>
           <ul>
-            <li><a href="https://github.com/anchor-tools/stellar-toml-lint" target="_blank" rel="noreferrer">Repository</a></li>
-            <li><a href="https://github.com/anchor-tools/stellar-toml-lint/issues" target="_blank" rel="noreferrer">Issues</a></li>
-            <li><a href="https://www.npmjs.com/package/stellar-toml-lint" target="_blank" rel="noreferrer">npm</a></li>
+            <li>
+              <a
+                href="https://github.com/anchor-tools/stellar-toml-lint"
+                target="_blank"
+                rel="noreferrer"
+                >Repository</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://github.com/anchor-tools/stellar-toml-lint/issues"
+                target="_blank"
+                rel="noreferrer"
+                >Issues</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://www.npmjs.com/package/stellar-toml-lint"
+                target="_blank"
+                rel="noreferrer"
+                >npm</a
+              >
+            </li>
           </ul>
         </div>
         <div>
           <h4>References</h4>
           <ul>
-            <li><a href="https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0001.md" target="_blank" rel="noreferrer">SEP-1</a></li>
-            <li><a href="https://github.com/stellar/stellar-anchor-tests" target="_blank" rel="noreferrer">anchor-tests</a></li>
-            <li><a href="https://github.com/anchor-tools/stellar-toml-lint#readme" target="_blank" rel="noreferrer">README</a></li>
+            <li>
+              <a
+                href="https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0001.md"
+                target="_blank"
+                rel="noreferrer"
+                >SEP-1</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://github.com/stellar/stellar-anchor-tests"
+                target="_blank"
+                rel="noreferrer"
+                >anchor-tests</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://github.com/anchor-tools/stellar-toml-lint#readme"
+                target="_blank"
+                rel="noreferrer"
+                >README</a
+              >
+            </li>
           </ul>
         </div>
       </div>
