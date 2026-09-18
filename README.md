@@ -6,6 +6,8 @@ Validate a Stellar Info File (`stellar.toml`) against **[SEP-1]** — offline, b
 [![npm](https://img.shields.io/npm/v/stellar-toml-lint.svg)](https://www.npmjs.com/package/stellar-toml-lint)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](./LICENSE)
 
+Documentation website: [stellar-toml-lint docs](https://anchor-tools.github.io/stellar-toml-lint/)
+
 ```console
 $ npx stellar-toml-lint public/.well-known/stellar.toml
 
