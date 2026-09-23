@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { lint } from '../src/lint.js';
-import { RECOMMENDED_DOCUMENTATION_FIELDS } from '../src/spec.js';
+import type { Diagnostic, LintResult } from '../src/types.js';
 
 describe('empty string values rule', () => {
   /** Default non-empty values for recommended documentation fields. */
@@ -26,8 +26,8 @@ describe('empty string values rule', () => {
     ].join('\n');
   }
 
-  function getEmptyStringDiagnostics(result: any) {
-    return result.diagnostics.filter((d: any) => d.rule === 'general/empty-string-value');
+  function getEmptyStringDiagnostics(result: LintResult): Diagnostic[] {
+    return result.diagnostics.filter((d): d is Diagnostic => d.rule === 'general/empty-string-value');
   }
 
   it('flags empty string in ORG_NAME', () => {
@@ -78,7 +78,7 @@ describe('empty string values rule', () => {
     const result = lint(source, { rules: {} });
     const diags = getEmptyStringDiagnostics(result);
     expect(diags).toHaveLength(2);
-    const paths = diags.map((d) => d.path);
+    const paths = diags.map((d: Diagnostic) => d.path);
     expect(paths).toContain('DOCUMENTATION.ORG_NAME');
     expect(paths).toContain('DOCUMENTATION.ORG_URL');
   });
