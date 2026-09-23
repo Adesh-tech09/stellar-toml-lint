@@ -87,7 +87,7 @@ cat stellar.toml | stellar-toml-lint -
 | `-q, --quiet`        | Show errors only                                                 |
 | `--show-help-urls`   | Print the spec link for each finding                             |
 | `--list-rules`       | Print every rule and exit                                        |
-| `--no-suggestions`   | Hide diagnostic suggestions in the output |
+| `--no-suggestions`   | Hide diagnostic suggestions in the output                        |
 
 Exit codes: **0** no errors, **1** problems found, **2** bad usage or I/O failure.
 
@@ -197,7 +197,7 @@ Run `stellar-toml-lint --list-rules` for the authoritative list. In summary:
 
 **General** — `VERSION`; `NETWORK_PASSPHRASE` matched byte-for-byte against the known networks;
 `https://` on every endpoint field; trailing-slash detection; checksum-valid `SIGNING_KEY`,
-`URI_REQUEST_SIGNING_KEY`, `WEB_AUTH_CONTRACT_ID`, and `ACCOUNTS`; deprecated fields; unknown fields.
+`URI_REQUEST_SIGNING_KEY`, `WEB_AUTH_CONTRACT_ID`, and `ACCOUNTS`; deprecated fields; unknown fields; and empty string values in documentation fields.
 
 **Cross-field dependencies** — `DIRECT_PAYMENT_SERVER` (SEP-31) requires `KYC_SERVER` (SEP-12);
 `WEB_AUTH_ENDPOINT` (SEP-10) requires `SIGNING_KEY`; SEP-45 needs both its endpoint and contract ID.
