@@ -27,7 +27,9 @@ describe('empty string values rule', () => {
   }
 
   function getEmptyStringDiagnostics(result: LintResult): Diagnostic[] {
-    return result.diagnostics.filter((d): d is Diagnostic => d.rule === 'general/empty-string-value');
+    return result.diagnostics.filter(
+      (d): d is Diagnostic => d.rule === 'general/empty-string-value',
+    );
   }
 
   it('flags empty string in ORG_NAME', () => {
