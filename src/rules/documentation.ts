@@ -11,7 +11,7 @@ import {
 } from '../predicates.js';
 
 /** Reads the `[DOCUMENTATION]` table, or `undefined` if absent/malformed. */
-function documentationOf(doc: Record<string, unknown>): Record<string, unknown> | undefined {
+export function documentationOf(doc: Record<string, unknown>): Record<string, unknown> | undefined {
   const table = doc.DOCUMENTATION;
   if (typeof table !== 'object' || table === null || Array.isArray(table)) return undefined;
   return table as Record<string, unknown>;
