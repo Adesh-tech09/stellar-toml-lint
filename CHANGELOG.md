@@ -13,12 +13,24 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   Bamboo, CircleCI, Azure DevOps). Error-severity findings are reported as `<failure>` elements and
   warnings as `<error>` elements, so a dashboard counting failures matches the exit code (#143).
 
+- `validators/invalid-history-url` (error) validates each `[[VALIDATORS]].HISTORY` as a well-formed
+  archive URL, including `{0}` template handling.
+- `validators/stellar-history-json-unreachable` (error) under `--check-network` fetches each
+  validator's archive root and requires it to serve `.well-known/stellar-history.json` with
+  `"version": 1` (#144).
+
 - Opt-in `--check-network` flag to query Horizon and report non-existent `SIGNING_KEY` or `ACCOUNTS` entries as warnings (#7).
 - `network/horizon-unreachable` and `network/horizon-protocol-outdated` under `--check-network`:
   the linter now GETs `HORIZON_URL` and asserts the response is a valid Horizon root document
   whose `current_protocol_version` is supported by the instance's `core_supported_protocol_version`,
   so a misconfigured, offline, or protocol-lagged Horizon endpoint fails the run instead of
   surfacing later as broken wallet interactions.
+
+### Changed
+
+- The `validators/history` warning is replaced by `validators/invalid-history-url`, which checks the
+  same field more strictly and reports it as an error. Update any `--off validators/history`
+  configuration to the new id.
 
 ### Added
 

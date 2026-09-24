@@ -88,6 +88,7 @@ cat stellar.toml | stellar-toml-lint -
 | `--show-help-urls`   | Print the spec link for each finding                                  |
 | `--list-rules`       | Print every rule and exit                                             |
 | `--no-suggestions`   | Hide diagnostic suggestions in the output                             |
+| `--check-network`    | Also verify `SIGNING_KEY`/`ACCOUNTS` and history archives live        |
 
 Exit codes: **0** no errors, **1** problems found, **2** bad usage or I/O failure.
 
@@ -250,8 +251,9 @@ emit `currencies/missing-anchor-asset-type` as an error. Missing `anchor_asset` 
 
 **`[[VALIDATORS]]`** — `ALIAS` matching `^[a-z0-9-]{2,16}$`, unique, and not colliding with a
 reserved stellar-core config keyword (`self`, `all`, `default`, `none`, `quorum`, `peers`,
-`manual`, `auto`); checksum-valid, unique `PUBLIC_KEY`; `HOST` as `host:port`; `HISTORY` as an
-absolute URI.
+`manual`, `auto`); checksum-valid, unique `PUBLIC_KEY`; `HOST` as `host:port`; `HISTORY` as a
+well-formed archive URL, with the `{0}` template parameter accepted and its braces required to
+balance.
 
 **Network** (with `--domain`) — reachability, `Access-Control-Allow-Origin: *`, `text/plain` content
 type, size, and the security of the TLS session: a negotiated protocol of TLS 1.0, TLS 1.1, SSLv2,
@@ -263,7 +265,9 @@ asserts it answers with a valid Horizon root document. An endpoint that is offli
 or returns something other than Horizon JSON emits `network/horizon-unreachable` (error); a
 `current_protocol_version` that the instance's `core_supported_protocol_version` does not cover
 emits `network/horizon-protocol-outdated` (warning). The same flag also verifies `SIGNING_KEY` and
-`ACCOUNTS` exist on the network.
+`ACCOUNTS` exist on the network, and fetches each validator's archive root to confirm it serves
+`.well-known/stellar-history.json` with `"version": 1`. Each check degrades to a diagnostic rather
+than an exception when the network fails.
 
 ### Severity
 

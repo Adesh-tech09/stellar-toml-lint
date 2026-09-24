@@ -96,7 +96,7 @@ describe('broken fixture', () => {
     'validators/alias',
     'validators/public-key',
     'validators/host',
-    'validators/history',
+    'validators/invalid-history-url',
   ])('detects %s', (rule) => {
     expect(rules(result)).toContain(rule);
   });
