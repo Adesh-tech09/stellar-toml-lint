@@ -70,6 +70,7 @@ describe('broken fixture', () => {
     'general/version',
     'network/passphrase',
     'general/https-endpoints',
+    'general/trailing-slash-in-endpoint',
     'general/signing-keys',
     'general/accounts',
     'general/sep31-requires-kyc',
@@ -96,7 +97,7 @@ describe('broken fixture', () => {
     'validators/alias',
     'validators/public-key',
     'validators/host',
-    'validators/history',
+    'validators/invalid-history-url',
   ])('detects %s', (rule) => {
     expect(rules(result)).toContain(rule);
   });
@@ -389,7 +390,8 @@ describe('rule registry', () => {
   it('gives every rule a description and a namespaced id', () => {
     for (const rule of allRules) {
       expect(rule.description.length).toBeGreaterThan(0);
-      expect(rule.id).toMatch(/^[a-z]+\/[a-z0-9-]+$/);
+      // Categories are lowercase; digits are allowed so `sep38/...` matches.
+      expect(rule.id).toMatch(/^[a-z][a-z0-9]*\/[a-z0-9-]+$/);
     }
   });
 
