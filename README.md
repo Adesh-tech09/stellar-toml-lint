@@ -248,8 +248,10 @@ Asset-anchored currencies (`is_asset_anchored = true`) must use one of `fiat`, `
 emit `currencies/missing-anchor-asset-type` as an error. Missing `anchor_asset` metadata emits the
 `currencies/missing-anchor-asset-code` warning.
 
-**`[[VALIDATORS]]`** — `ALIAS` matching `^[a-z0-9-]{2,16}$` and unique; checksum-valid, unique
-`PUBLIC_KEY`; `HOST` as `host:port`; `HISTORY` as an absolute URI.
+**`[[VALIDATORS]]`** — `ALIAS` matching `^[a-z0-9-]{2,16}$`, unique, and not colliding with a
+reserved stellar-core config keyword (`self`, `all`, `default`, `none`, `quorum`, `peers`,
+`manual`, `auto`); checksum-valid, unique `PUBLIC_KEY`; `HOST` as `host:port`; `HISTORY` as an
+absolute URI.
 
 **Network** (with `--domain`) — reachability, `Access-Control-Allow-Origin: *`, `text/plain` content
 type, size, and the security of the TLS session: a negotiated protocol of TLS 1.0, TLS 1.1, SSLv2,
