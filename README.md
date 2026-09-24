@@ -256,6 +256,13 @@ type, size, and the security of the TLS session: a negotiated protocol of TLS 1.
 or SSLv3, and cipher suites built on 3DES, DES, RC4, CBC, NULL, or EXPORT primitives. Nothing here
 fires for a local file, so offline linting never depends on a network connection.
 
+**Network** (with `--check-network`) — queries the `HORIZON_URL` endpoint the file advertises and
+asserts it answers with a valid Horizon root document. An endpoint that is offline, misconfigured,
+or returns something other than Horizon JSON emits `network/horizon-unreachable` (error); a
+`current_protocol_version` that the instance's `core_supported_protocol_version` does not cover
+emits `network/horizon-protocol-outdated` (warning). The same flag also verifies `SIGNING_KEY` and
+`ACCOUNTS` exist on the network.
+
 ### Severity
 
 - **error** — violates SEP-1, or will break a client. Fails the build.

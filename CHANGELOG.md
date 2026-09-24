@@ -14,6 +14,11 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   warnings as `<error>` elements, so a dashboard counting failures matches the exit code (#143).
 
 - Opt-in `--check-network` flag to query Horizon and report non-existent `SIGNING_KEY` or `ACCOUNTS` entries as warnings (#7).
+- `network/horizon-unreachable` and `network/horizon-protocol-outdated` under `--check-network`:
+  the linter now GETs `HORIZON_URL` and asserts the response is a valid Horizon root document
+  whose `current_protocol_version` is supported by the instance's `core_supported_protocol_version`,
+  so a misconfigured, offline, or protocol-lagged Horizon endpoint fails the run instead of
+  surfacing later as broken wallet interactions.
 
 ### Added
 
