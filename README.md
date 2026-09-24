@@ -81,6 +81,7 @@ cat stellar.toml | stellar-toml-lint -
 | `-f, --format <fmt>` | `text` (default), `json`, `sarif`, `github`, `junit`                  |
 | `--strict`           | Treat warnings as errors                                              |
 | `--max-warnings <n>` | Fail if warnings exceed `n`                                           |
+| `--check-network`    | Verify accounts, `HORIZON_URL`, and `ANCHOR_QUOTE_SERVER` online      |
 | `--off <rule>`       | Disable a rule (repeatable)                                           |
 | `--error <rule>`     | Raise a rule to error (repeatable)                                    |
 | `--warn <rule>`      | Lower a rule to warning (repeatable)                                  |
@@ -263,7 +264,14 @@ asserts it answers with a valid Horizon root document. An endpoint that is offli
 or returns something other than Horizon JSON emits `network/horizon-unreachable` (error); a
 `current_protocol_version` that the instance's `core_supported_protocol_version` does not cover
 emits `network/horizon-protocol-outdated` (warning). The same flag also verifies `SIGNING_KEY` and
-`ACCOUNTS` exist on the network.
+`ACCOUNTS` exist on the network, and when `ANCHOR_QUOTE_SERVER` is declared it GETs
+`/prices?sell_asset=...` for each classic currency and asserts a 200 whose body carries a
+`buy_assets` array of valid price objects — a 5xx, unreachable server, or HTML where a price object
+belongs emits `sep38/prices-endpoint-error` or `sep38/malformed-price-response` (both errors), so a
+wallet that cannot negotiate exchange rates fails the run instead of at transfer time. The
+`/quote` route is probed too: a 5xx emits `sep38/quote-endpoint-error`, and a 200 that is not a JSON
+object emits `sep38/malformed-quote-response`, while the 400/401/404 a bare unauthenticated GET
+legitimately earns stays silent.
 
 ### Severity
 

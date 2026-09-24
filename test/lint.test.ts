@@ -389,7 +389,8 @@ describe('rule registry', () => {
   it('gives every rule a description and a namespaced id', () => {
     for (const rule of allRules) {
       expect(rule.description.length).toBeGreaterThan(0);
-      expect(rule.id).toMatch(/^[a-z]+\/[a-z0-9-]+$/);
+      // Categories are lowercase; digits are allowed so `sep38/...` matches.
+      expect(rule.id).toMatch(/^[a-z][a-z0-9]*\/[a-z0-9-]+$/);
     }
   });
 
