@@ -70,6 +70,7 @@ describe('broken fixture', () => {
     'general/version',
     'network/passphrase',
     'general/https-endpoints',
+    'general/trailing-slash-in-endpoint',
     'general/signing-keys',
     'general/accounts',
     'general/sep31-requires-kyc',

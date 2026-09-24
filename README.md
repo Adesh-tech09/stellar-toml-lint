@@ -231,7 +231,10 @@ Run `stellar-toml-lint --list-rules` for the authoritative list. In summary:
 **File** — 100KB size limit, TOML syntax with line and column, UTF-8 BOM detection.
 
 **General** — `VERSION`; `NETWORK_PASSPHRASE` matched byte-for-byte against the known networks;
-`https://` on every endpoint field; trailing-slash detection; checksum-valid `SIGNING_KEY`,
+`https://` on every endpoint field; no trailing slashes on service endpoints
+(`WEB_AUTH_ENDPOINT`, `TRANSFER_SERVER`, `TRANSFER_SERVER_SEP0024`, `KYC_SERVER`,
+`ANCHOR_QUOTE_SERVER`, `DIRECT_PAYMENT_SERVER` — a trailing `/` turns client sub-routes into
+`//info` and triggers redirects that strip `Authorization`); checksum-valid `SIGNING_KEY`,
 `URI_REQUEST_SIGNING_KEY`, `WEB_AUTH_CONTRACT_ID`, and `ACCOUNTS`; deprecated fields; unknown fields; empty string values in documentation fields; and uppercase-only Stellar public keys
 (`SIGNING_KEY`, `[[CURRENCIES]].issuer`, `[[VALIDATORS]].PUBLIC_KEY`) — lowercase base32 letters are
 flagged with the corrected uppercase form, since wallets compare the string when matching accounts.
