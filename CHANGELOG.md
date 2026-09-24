@@ -9,6 +9,11 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- `general/invalid-github-handle` (warning) validates `[DOCUMENTATION].ORG_GITHUB` as a GitHub
+  username or `https://github.com/<username>` profile URL, rejecting leading/trailing or doubled
+  hyphens, invalid characters, and handles over 39 characters. `documentation/social-handles` no
+  longer flags `ORG_GITHUB`, since the profile URL form is accepted (#147).
+
 - `--format junit` emits a JUnit XML test report for CI dashboards that chart test results (Jenkins,
   Bamboo, CircleCI, Azure DevOps). Error-severity findings are reported as `<failure>` elements and
   warnings as `<error>` elements, so a dashboard counting failures matches the exit code (#143).

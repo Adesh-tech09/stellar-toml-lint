@@ -18,6 +18,7 @@ import {
   isUrl,
 } from '../predicates.js';
 import { emptyStringValuesRule } from './empty-values.js';
+import { githubHandleRules } from './github-handle.js';
 
 /** Rules covering file-level constraints and the global (untabled) fields. */
 export const generalRules: Rule[] = [
@@ -425,4 +426,5 @@ export const generalRules: Rule[] = [
     },
   },
   emptyStringValuesRule,
+  ...githubHandleRules,
 ];
