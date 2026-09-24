@@ -331,9 +331,20 @@ async function readStdin(): Promise<string> {
   return Buffer.concat(chunks).toString('utf8');
 }
 
-/** Honours NO_COLOR and FORCE_COLOR, falling back to TTY detection. */
+/**
+ * Decides whether the text reporter emits ANSI colour.
+ *
+ * Follows the NO_COLOR standard (https://no-color.org): any non-empty NO_COLOR
+ * value disables colour, whatever it contains, and an empty value counts as
+ * unset. FORCE_COLOR is honoured next, and TTY detection is the fallback.
+ *
+ * An explicit `--color` or `--no-color` is resolved by `main` before this is
+ * consulted, so the flag always wins — that is the only thing that overrides
+ * NO_COLOR.
+ */
 function shouldUseColor(): boolean {
-  if (process.env.NO_COLOR) return false;
+  const noColor = process.env.NO_COLOR;
+  if (noColor !== undefined && noColor !== '') return false;
   if (process.env.FORCE_COLOR && process.env.FORCE_COLOR !== '0') return true;
   return process.stdout.isTTY === true;
 }

@@ -9,6 +9,10 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Text output follows the [NO_COLOR standard](https://no-color.org) explicitly: any non-empty
+  `NO_COLOR` disables colour, an empty value counts as unset, and only an explicit `--color`
+  overrides it. Covered by `test/no-color.test.ts` (#148).
+
 - `--format junit` emits a JUnit XML test report for CI dashboards that chart test results (Jenkins,
   Bamboo, CircleCI, Azure DevOps). Error-severity findings are reported as `<failure>` elements and
   warnings as `<error>` elements, so a dashboard counting failures matches the exit code (#143).
