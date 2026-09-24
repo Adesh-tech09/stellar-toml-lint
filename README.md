@@ -89,8 +89,14 @@ cat stellar.toml | stellar-toml-lint -
 | `--show-help-urls`   | Print the spec link for each finding                                  |
 | `--list-rules`       | Print every rule and exit                                             |
 | `--no-suggestions`   | Hide diagnostic suggestions in the output                             |
+| `--color`            | Force colour on, overriding `NO_COLOR`                                |
+| `--no-color`         | Force colour off                                                      |
 
 Exit codes: **0** no errors, **1** problems found, **2** bad usage or I/O failure.
+
+Colour output follows the [NO_COLOR standard](https://no-color.org): setting `NO_COLOR` to any
+non-empty value disables it, an empty value counts as unset, and stdout not being a terminal
+disables it too. An explicit `--color` is the only thing that overrides `NO_COLOR`.
 
 ## In CI
 
