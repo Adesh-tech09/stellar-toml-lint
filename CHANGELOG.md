@@ -9,6 +9,10 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Text output follows the [NO_COLOR standard](https://no-color.org) explicitly: any non-empty
+  `NO_COLOR` disables colour, an empty value counts as unset, and only an explicit `--color`
+  overrides it. Covered by `test/no-color.test.ts` (#148).
+
 - `--format junit` emits a JUnit XML test report for CI dashboards that chart test results (Jenkins,
   Bamboo, CircleCI, Azure DevOps). Error-severity findings are reported as `<failure>` elements and
   warnings as `<error>` elements, so a dashboard counting failures matches the exit code (#143).
@@ -25,6 +29,12 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   whose `current_protocol_version` is supported by the instance's `core_supported_protocol_version`,
   so a misconfigured, offline, or protocol-lagged Horizon endpoint fails the run instead of
   surfacing later as broken wallet interactions.
+- `sep38/prices-endpoint-error`, `sep38/malformed-price-response`, `sep38/quote-endpoint-error`, and
+  `sep38/malformed-quote-response` under `--check-network`: when `ANCHOR_QUOTE_SERVER` is declared,
+  the linter GETs `/prices?sell_asset=...` for each classic currency and asserts a 200 whose body
+  carries a `buy_assets` array of valid price objects, and probes `/quote` for 5xx or non-JSON 200
+  answers — so a quote server returning 500s or malformed JSON fails the run instead of surfacing
+  later as wallets unable to calculate transaction amounts.
 
 ### Changed
 

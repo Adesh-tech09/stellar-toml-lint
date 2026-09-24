@@ -81,6 +81,7 @@ cat stellar.toml | stellar-toml-lint -
 | `-f, --format <fmt>` | `text` (default), `json`, `sarif`, `github`, `junit`                  |
 | `--strict`           | Treat warnings as errors                                              |
 | `--max-warnings <n>` | Fail if warnings exceed `n`                                           |
+| `--check-network`    | Verify accounts, `HORIZON_URL`, and `ANCHOR_QUOTE_SERVER` online      |
 | `--off <rule>`       | Disable a rule (repeatable)                                           |
 | `--error <rule>`     | Raise a rule to error (repeatable)                                    |
 | `--warn <rule>`      | Lower a rule to warning (repeatable)                                  |
@@ -88,9 +89,14 @@ cat stellar.toml | stellar-toml-lint -
 | `--show-help-urls`   | Print the spec link for each finding                                  |
 | `--list-rules`       | Print every rule and exit                                             |
 | `--no-suggestions`   | Hide diagnostic suggestions in the output                             |
-| `--check-network`    | Also verify `SIGNING_KEY`/`ACCOUNTS` and history archives live        |
+| `--color`            | Force colour on, overriding `NO_COLOR`                                |
+| `--no-color`         | Force colour off                                                      |
 
 Exit codes: **0** no errors, **1** problems found, **2** bad usage or I/O failure.
+
+Colour output follows the [NO_COLOR standard](https://no-color.org): setting `NO_COLOR` to any
+non-empty value disables it, an empty value counts as unset, and stdout not being a terminal
+disables it too. An explicit `--color` is the only thing that overrides `NO_COLOR`.
 
 ## In CI
 
@@ -226,7 +232,9 @@ Run `stellar-toml-lint --list-rules` for the authoritative list. In summary:
 
 **General** — `VERSION`; `NETWORK_PASSPHRASE` matched byte-for-byte against the known networks;
 `https://` on every endpoint field; trailing-slash detection; checksum-valid `SIGNING_KEY`,
-`URI_REQUEST_SIGNING_KEY`, `WEB_AUTH_CONTRACT_ID`, and `ACCOUNTS`; deprecated fields; unknown fields; and empty string values in documentation fields.
+`URI_REQUEST_SIGNING_KEY`, `WEB_AUTH_CONTRACT_ID`, and `ACCOUNTS`; deprecated fields; unknown fields; empty string values in documentation fields; and uppercase-only Stellar public keys
+(`SIGNING_KEY`, `[[CURRENCIES]].issuer`, `[[VALIDATORS]].PUBLIC_KEY`) — lowercase base32 letters are
+flagged with the corrected uppercase form, since wallets compare the string when matching accounts.
 
 **Cross-field dependencies** — `DIRECT_PAYMENT_SERVER` (SEP-31) requires `KYC_SERVER` (SEP-12);
 `WEB_AUTH_ENDPOINT` (SEP-10) requires `SIGNING_KEY`; SEP-45 needs both its endpoint and contract ID.
@@ -265,9 +273,14 @@ asserts it answers with a valid Horizon root document. An endpoint that is offli
 or returns something other than Horizon JSON emits `network/horizon-unreachable` (error); a
 `current_protocol_version` that the instance's `core_supported_protocol_version` does not cover
 emits `network/horizon-protocol-outdated` (warning). The same flag also verifies `SIGNING_KEY` and
-`ACCOUNTS` exist on the network, and fetches each validator's archive root to confirm it serves
-`.well-known/stellar-history.json` with `"version": 1`. Each check degrades to a diagnostic rather
-than an exception when the network fails.
+`ACCOUNTS` exist on the network, and when `ANCHOR_QUOTE_SERVER` is declared it GETs
+`/prices?sell_asset=...` for each classic currency and asserts a 200 whose body carries a
+`buy_assets` array of valid price objects — a 5xx, unreachable server, or HTML where a price object
+belongs emits `sep38/prices-endpoint-error` or `sep38/malformed-price-response` (both errors), so a
+wallet that cannot negotiate exchange rates fails the run instead of at transfer time. The
+`/quote` route is probed too: a 5xx emits `sep38/quote-endpoint-error`, and a 200 that is not a JSON
+object emits `sep38/malformed-quote-response`, while the 400/401/404 a bare unauthenticated GET
+legitimately earns stays silent.
 
 ### Severity
 

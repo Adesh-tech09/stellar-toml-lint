@@ -14,7 +14,7 @@ import { checkNetworkAccounts } from './network-checks.js';
 import { formatGithub, formatJson, formatJunit, formatSarif, formatText } from './reporters.js';
 import { checkDisplayDecimals } from './rules/display-decimals-audit.js';
 import { checkHorizon } from './rules/horizon-check.js';
-import { checkHistoryArchive } from './rules/history-url-check.js';
+import { checkSep38 } from './rules/sep38-endpoints.js';
 import { allRules } from './rules/index.js';
 import type { LintResult, RuleOverrides, Severity } from './types.js';
 
@@ -58,7 +58,8 @@ OPTIONS
   -q, --quiet             Report errors only
       --show-help-urls    Print the spec link for each finding
       --no-suggestions    Hide diagnostic suggestions in the output
-      --check-network     Verify SIGNING_KEY, ACCOUNTS, HORIZON_URL and history archives
+      --check-network     Verify SIGNING_KEY, ACCOUNTS, HORIZON_URL, and
+                          ANCHOR_QUOTE_SERVER against the network
       --color / --no-color
       --list-rules        Print every rule and exit
   -v, --version
@@ -113,7 +114,7 @@ async function main(argv: string[]): Promise<number> {
             ...(await checkHorizon(fileResult.parsed, fetch, { rules: cli.rules })),
             ...(await checkNetworkAccounts(fileResult.parsed)),
             ...(await checkDisplayDecimals(fileResult.parsed, fetch, { rules: cli.rules })),
-            ...(await checkHistoryArchive(fileResult.parsed, fetch, { rules: cli.rules })),
+            ...(await checkSep38(fileResult.parsed, fetch, { rules: cli.rules })),
           ];
           if (networkDiagnostics.length > 0) {
             fileResult = finalize(
@@ -330,9 +331,20 @@ async function readStdin(): Promise<string> {
   return Buffer.concat(chunks).toString('utf8');
 }
 
-/** Honours NO_COLOR and FORCE_COLOR, falling back to TTY detection. */
+/**
+ * Decides whether the text reporter emits ANSI colour.
+ *
+ * Follows the NO_COLOR standard (https://no-color.org): any non-empty NO_COLOR
+ * value disables colour, whatever it contains, and an empty value counts as
+ * unset. FORCE_COLOR is honoured next, and TTY detection is the fallback.
+ *
+ * An explicit `--color` or `--no-color` is resolved by `main` before this is
+ * consulted, so the flag always wins — that is the only thing that overrides
+ * NO_COLOR.
+ */
 function shouldUseColor(): boolean {
-  if (process.env.NO_COLOR) return false;
+  const noColor = process.env.NO_COLOR;
+  if (noColor !== undefined && noColor !== '') return false;
   if (process.env.FORCE_COLOR && process.env.FORCE_COLOR !== '0') return true;
   return process.stdout.isTTY === true;
 }
